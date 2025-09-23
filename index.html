@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaHla | منصة احترافية للعمل الحر</title>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/9gq85f4/photo-2025-09-17-12-03-57.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://aistudiocdn.com/react@^19.1.1",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+        "react/": "https://aistudiocdn.com/react@^19.1.1/",
+        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0"
+      }
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary: #3B82F6;
+            --primary-dark: #1E3A8A;
+            --primary-light: #60A5FA;
+            --primary-lightest: #EFF6FF;
+            --secondary: #F97316;
+            --secondary-dark: #EA580C;
+            --secondary-light: #FFF7ED;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        * { font-family: 'Tajawal', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { 
+            direction: rtl; 
+            background-color: #F4F7FE; /* Updated professional background */
+            color: #1f2937; 
+            line-height: 1.6; 
+        }
+
+        /* Keyframe animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes profileZoomIn {
+            from { opacity: 0; transform: scale(0.98) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes messageSlideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Thinking animation for chat */
+        .ai-chat-message.bot.thinking .message-content::after {
+            content: '...';
+            display: inline-block;
+            animation: typing 1s infinite;
+        }
+        @keyframes typing { 0% { content: '.'; } 33% { content: '..'; } 66% { content: '...'; } }
+    </style>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
