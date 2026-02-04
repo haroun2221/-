@@ -1,18 +1,18 @@
 
 import React, { useState, useEffect } from 'react';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import DashboardHeader from '../components/dashboard/DashboardHeader';
-import DashboardOverview from '../components/dashboard/DashboardOverview';
-import DashboardProjects from '../components/dashboard/DashboardProjects';
-import DashboardEarnings from '../components/dashboard/DashboardEarnings';
-import DashboardMessages from '../components/dashboard/DashboardMessages';
-import DashboardProfile from '../components/dashboard/DashboardProfile';
-import DashboardProfileSidebar from '../components/dashboard/DashboardProfileSidebar';
-import type { User } from '../services/authService';
-import { updateUser } from '../services/authService';
-import type { Page } from '../App';
-import type { FreelancerProfileData } from '../types';
-import { generateIdFromEmail } from '../services/freelancerService';
+import DashboardSidebar from '../components/dashboard/DashboardSidebar.tsx';
+import DashboardHeader from '../components/dashboard/DashboardHeader.tsx';
+import DashboardOverview from '../components/dashboard/DashboardOverview.tsx';
+import DashboardProjects from '../components/dashboard/DashboardProjects.tsx';
+import DashboardEarnings from '../components/dashboard/DashboardEarnings.tsx';
+import DashboardMessages from '../components/dashboard/DashboardMessages.tsx';
+import DashboardProfile from '../components/dashboard/DashboardProfile.tsx';
+import DashboardProfileSidebar from '../components/dashboard/DashboardProfileSidebar.tsx';
+import type { User } from '../services/authService.ts';
+import { updateUser } from '../services/authService.ts';
+import type { Page } from '../App.tsx';
+import type { FreelancerProfileData } from '../types.ts';
+import { generateIdFromEmail } from '../services/freelancerService.ts';
 
 interface FreelancerDashboardPageProps {
     user: User;

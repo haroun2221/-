@@ -1,5 +1,5 @@
 
-import type { User, InitialAvatarConfig } from '../types';
+import type { User, InitialAvatarConfig } from '../types.ts';
 
 const USERS_KEY = 'saaHlaUsers';
 const CURRENT_USER_KEY = 'saaHlaCurrentUser';

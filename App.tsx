@@ -1,23 +1,23 @@
 
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import FreelancersPage from './pages/FreelancersPage';
-import ProductsPage from './pages/ProductsPage';
-import HowItWorksPage from './pages/HowItWorksPage';
-import FreelancerProfilePage from './pages/FreelancerProfilePage';
-import ProjectDetailsPage from './pages/ProjectDetailsPage';
-import CommunicationPage from './pages/CommunicationPage';
-import FreelancerDashboardPage from './pages/FreelancerDashboardPage';
-import AuthModal from './components/auth/AuthModal';
-import ProductDetailModal from './components/ProductDetailModal';
-import AIChatPopup from './components/AIChatPopup';
-import { getCurrentUser, logoutUser, User } from './services/authService';
-import { productsData } from './data/mockData';
-import { getFreelancerById } from './services/freelancerService';
-import { getFreelancerPortfolio } from './services/portfolioService';
-import type { Freelancer, Product, PortfolioItem } from './types';
+import Navbar from './components/Navbar.tsx';
+import Footer from './components/Footer.tsx';
+import HomePage from './pages/HomePage.tsx';
+import FreelancersPage from './pages/FreelancersPage.tsx';
+import ProductsPage from './pages/ProductsPage.tsx';
+import HowItWorksPage from './pages/HowItWorksPage.tsx';
+import FreelancerProfilePage from './pages/FreelancerProfilePage.tsx';
+import ProjectDetailsPage from './pages/ProjectDetailsPage.tsx';
+import CommunicationPage from './pages/CommunicationPage.tsx';
+import FreelancerDashboardPage from './pages/FreelancerDashboardPage.tsx';
+import AuthModal from './components/auth/AuthModal.tsx';
+import ProductDetailModal from './components/ProductDetailModal.tsx';
+import AIChatPopup from './components/AIChatPopup.tsx';
+import { getCurrentUser, logoutUser, User } from './services/authService.ts';
+import { productsData } from './data/mockData.ts';
+import { getFreelancerById } from './services/freelancerService.ts';
+import { getFreelancerPortfolio } from './services/portfolioService.ts';
+import type { Freelancer, Product, PortfolioItem } from './types.ts';
 
 export type Page = 'home' | 'freelancers' | 'products' | 'how-it-works' | 'freelancer-profile' | 'project-details' | 'communication' | 'dashboard';
 
