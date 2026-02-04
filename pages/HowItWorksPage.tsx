@@ -1,9 +1,48 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import FaqItem from '../components/FaqItem';
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+// Fix: Use correct initialization as per Gemini SDK guidelines
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
+const StepIllustration1: React.FC = () => (
+    <svg viewBox="0 0 200 150" className="w-full h-48 object-cover rounded-xl mb-6">
+        <rect width="200" height="150" rx="10" fill="#F3F4F6" />
+        <rect x="20" y="30" width="160" height="90" rx="5" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="2" />
+        <rect x="35" y="45" width="100" height="8" rx="2" fill="#D1D5DB" />
+        <rect x="35" y="65" width="130" height="6" rx="2" fill="#E5E7EB" />
+        <rect x="35" y="80" width="130" height="6" rx="2" fill="#E5E7EB" />
+        <rect x="35" y="95" width="80" height="6" rx="2" fill="#E5E7EB" />
+        <circle cx="160" cy="100" r="18" fill="#3B82F6" />
+        <path d="M 155 98 L 159 102 L 167 94" stroke="#FFFFFF" strokeWidth="3" fill="none" strokeLinecap="round" />
+    </svg>
+);
+
+const StepIllustration2: React.FC = () => (
+    <svg viewBox="0 0 200 150" className="w-full h-48 object-cover rounded-xl mb-6">
+        <rect width="200" height="150" rx="10" fill="#F3F4F6" />
+        <rect x="15" y="25" width="70" height="100" rx="5" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="2" />
+        <circle cx="50" cy="50" r="12" fill="#D1D5DB" />
+        <rect x="30" y="70" width="40" height="6" rx="2" fill="#E5E7EB" />
+        <rect x="30" y="82" width="40" height="4" rx="2" fill="#E5E7EB" />
+        <rect x="115" y="25" width="70" height="100" rx="5" fill="#FFFFFF" stroke="#3B82F6" strokeWidth="3" transform="translate(0, -5) rotate(-2, 150, 75)" />
+        <circle cx="150" cy="45" r="12" fill="#60A5FA" />
+        <rect x="130" y="65" width="40" height="6" rx="2" fill="#D1D5DB" />
+        <rect x="130" y="77" width="40" height="4" rx="2" fill="#E5E7EB" />
+    </svg>
+);
+
+const StepIllustration3: React.FC = () => (
+    <svg viewBox="0 0 200 150" className="w-full h-48 object-cover rounded-xl mb-6">
+        <rect width="200" height="150" rx="10" fill="#F3F4F6" />
+        <path d="M 60 40 L 140 40 C 151 40, 151 55, 140 55 L 60 55 C 49 55, 49 40, 60 40 Z" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="2"/>
+        <path d="M 50 50 L 150 50 C 161 50, 161 65, 150 65 L 50 65 C 39 65, 39 50, 50 50 Z" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="2"/>
+        <path d="M 40 60 L 160 60 C 171 60, 171 75, 160 75 L 40 75 C 29 75, 29 60, 40 60 Z" fill="#3B82F6"/>
+        <path d="M 75 65 L 85 70 L 100 62" stroke="#FFFFFF" strokeWidth="3" fill="none" strokeLinecap="round"/>
+        <circle cx="125" cy="67.5" r="5" fill="#FFFFFF" />
+    </svg>
+);
+
 
 const AIChat: React.FC = () => {
     const [messages, setMessages] = useState<{ text: string; sender: 'user' | 'bot' }[]>([]);
@@ -27,8 +66,9 @@ const AIChat: React.FC = () => {
 
     const getBotResponse = async (question: string): Promise<string> => {
         try {
+            // Fix: Updated model to 'gemini-3-flash-preview' as recommended for basic text tasks
             const response = await ai.models.generateContent({
-                model: "gemini-2.5-flash",
+                model: 'gemini-3-flash-preview',
                 contents: question,
                 config: {
                     systemInstruction: `أنت "SaaHla AI"، مساعد ذكي وخبير في منصة العمل الحر الجزائرية "SaaHla". 
@@ -125,7 +165,7 @@ const HowItWorksPage: React.FC = () => {
                             </p>
                         </div>
                         <div>
-                            <img src="https://placehold.co/600x450/2E3D80/ffffff?text=فريقنا" alt="فريق العمل" className="rounded-2xl shadow-xl transition-transform duration-500 hover:scale-105" />
+                            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&h=450&fit=crop" alt="فريق العمل" className="rounded-2xl shadow-xl transition-transform duration-500 hover:scale-105" />
                         </div>
                     </div>
                 </div>
@@ -139,17 +179,17 @@ const HowItWorksPage: React.FC = () => {
                     </p>
                     <div className="grid md:grid-cols-3 gap-8">
                         <div className="bg-white rounded-2xl p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                            <img src="https://placehold.co/400x300/FDE8D4/D86B10?text=1" alt="نشر المشروع" className="w-full h-48 object-cover rounded-xl mb-6"/>
+                            <StepIllustration1 />
                             <h3 className="text-2xl font-bold mb-3 text-[var(--primary-dark)]">انشر مشروعك</h3>
                             <p className="text-gray-500">قم بوصف مشروعك بالتفصيل، حدد المهارات المطلوبة والميزانية المتوقعة. كلما كانت التفاصيل أوضح، كانت العروض التي تتلقاها أفضل.</p>
                         </div>
                         <div className="bg-white rounded-2xl p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                             <img src="https://placehold.co/400x300/F0F2F9/2E3D80?text=2" alt="اختر المستقل" className="w-full h-48 object-cover rounded-xl mb-6"/>
+                             <StepIllustration2 />
                             <h3 className="text-2xl font-bold mb-3 text-[var(--primary-dark)]">اختر المستقل الأنسب</h3>
                             <p className="text-gray-500">ستتلقى عروضاً من مستقلين محترفين. قارن بين ملفاتهم الشخصية، أعمالهم السابقة، وتقييماتهم لاختيار الشخص المثالي لمشروعك.</p>
                         </div>
                         <div className="bg-white rounded-2xl p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                            <img src="https://placehold.co/400x300/FDE8D4/D86B10?text=3" alt="ادفع بأمان" className="w-full h-48 object-cover rounded-xl mb-6"/>
+                            <StepIllustration3 />
                             <h3 className="text-2xl font-bold mb-3 text-[var(--primary-dark)]">ادفع بأمان</h3>
                             <p className="text-gray-500">أودع قيمة المشروع في حساب آمن لدينا. لن يتم تحويل المبلغ للمستقل إلا بعد أن تستلم العمل وتوافق عليه بالكامل.</p>
                         </div>

@@ -1,11 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import type { Product, Review } from '../types';
 
 interface ProductDetailModalProps {
     product: Product;
     onClose: () => void;
+    onPurchaseAttempt: () => void;
 }
+
+const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=800&h=600&fit=crop';
 
 const ProductReview: React.FC<{ review: Review }> = ({ review }) => {
     const colors = ['#1E3A8A', '#F97316', '#10b981', '#ef4444', '#3B82F6', '#8b5cf6'];
@@ -31,8 +33,8 @@ const ProductReview: React.FC<{ review: Review }> = ({ review }) => {
     );
 };
 
-const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClose }) => {
-    const [mainImage, setMainImage] = useState(product.images[0]);
+const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClose, onPurchaseAttempt }) => {
+    const [mainImage, setMainImage] = useState(product.images?.[0] || PLACEHOLDER_IMAGE);
     const [isClosing, setIsClosing] = useState(false);
 
     useEffect(() => {
@@ -96,7 +98,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                                 <img src={mainImage} alt={product.title} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
                             </div>
                             <div className="grid grid-cols-4 gap-3">
-                                {product.images.slice(0, 4).map((img, index) =>
+                                {(product.images.length > 0 ? product.images : [PLACEHOLDER_IMAGE]).map((img, index) =>
                                     <img 
                                         key={index} 
                                         src={img} 
@@ -123,11 +125,15 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                             <p className="text-gray-700 leading-relaxed my-4 flex-grow">{product.description}</p>
                             <div className="mt-auto pt-6 border-t-2 border-gray-100">
                                 <div className="flex flex-col gap-3">
-                                    <button className="btn bg-gradient-to-r from-[var(--secondary)] to-[var(--secondary-dark)] text-white font-bold py-3 px-8 rounded-full text-lg w-full transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[var(--secondary-light)]">
+                                    <button 
+                                        onClick={onPurchaseAttempt}
+                                        className="btn bg-gradient-to-r from-[var(--secondary)] to-[var(--secondary-dark)] text-white font-bold py-3 px-8 rounded-full text-lg w-full transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[var(--secondary-light)]">
                                         <i className="fas fa-credit-card ml-3"></i>
                                         اشتري الآن
                                     </button>
-                                    <button className="btn bg-blue-100 hover:bg-blue-200 text-[var(--primary-dark)] font-bold py-3 px-8 rounded-full text-lg w-full">
+                                    <button 
+                                        onClick={onPurchaseAttempt}
+                                        className="btn bg-blue-100 hover:bg-blue-200 text-[var(--primary-dark)] font-bold py-3 px-8 rounded-full text-lg w-full">
                                         <i className="fas fa-shopping-cart ml-3"></i>
                                         أضف إلى السلة
                                     </button>

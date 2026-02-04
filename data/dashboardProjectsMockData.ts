@@ -1,11 +1,19 @@
-
 import type { DashboardProject } from '../types';
+
+const clientAvatars: { [key: string]: string } = {
+    company: 'https://i.ibb.co/vLYD2kC/p-woman-2.jpg',
+    ahmed: 'https://i.ibb.co/68q2v7B/p-man-1.jpg',
+    store: 'https://i.ibb.co/q5k2g8J/p-woman-3.jpg',
+    youssef: 'https://i.ibb.co/k2Wb5vC/p-man-3.jpg',
+    fatima: 'https://i.ibb.co/K7zYd9Q/p-woman-4.jpg',
+    ali: 'https://i.ibb.co/C1L1Ndx/p-man-4.jpg',
+};
 
 export const dashboardProjectsData: DashboardProject[] = [
     {
         id: 1,
         clientName: 'شركة تقنية ناشئة',
-        clientAvatar: 'https://placehold.co/40x40/2E3D80/ffffff?text=T',
+        clientAvatar: clientAvatars.company,
         title: 'تصميم واجهة مستخدم لتطبيق موبايل',
         budget: 120000,
         deadline: '2024-10-15',
@@ -16,7 +24,7 @@ export const dashboardProjectsData: DashboardProject[] = [
     {
         id: 2,
         clientName: 'أحمد صالح',
-        clientAvatar: 'https://placehold.co/40x40/F28123/ffffff?text=A',
+        clientAvatar: clientAvatars.ahmed,
         title: 'كتابة 5 مقالات تسويقية عن العقارات',
         budget: 25000,
         deadline: '2024-09-30',
@@ -27,7 +35,7 @@ export const dashboardProjectsData: DashboardProject[] = [
     {
         id: 3,
         clientName: 'متجر إلكتروني',
-        clientAvatar: 'https://placehold.co/40x40/10b981/ffffff?text=S',
+        clientAvatar: clientAvatars.store,
         title: 'إدارة حملة إعلانية على فيسبوك',
         budget: 50000,
         deadline: '2024-10-05',
@@ -38,7 +46,7 @@ export const dashboardProjectsData: DashboardProject[] = [
     {
         id: 4,
         clientName: 'يوسف إبراهيم',
-        clientAvatar: 'https://placehold.co/40x40/2E3D80/ffffff?text=Y',
+        clientAvatar: clientAvatars.youssef,
         title: 'تطوير صفحة هبوط لموقع ويب',
         budget: 35000,
         deadline: '2024-10-10',
@@ -49,7 +57,7 @@ export const dashboardProjectsData: DashboardProject[] = [
     {
         id: 5,
         clientName: 'فاطمة الزهراء',
-        clientAvatar: 'https://placehold.co/40x40/F28123/ffffff?text=F',
+        clientAvatar: clientAvatars.fatima,
         title: 'تصميم شعار وهوية بصرية',
         budget: 60000,
         deadline: '2024-09-25',
@@ -60,7 +68,7 @@ export const dashboardProjectsData: DashboardProject[] = [
     {
         id: 6,
         clientName: 'علي حسن',
-        clientAvatar: 'https://placehold.co/40x40/10b981/ffffff?text=A',
+        clientAvatar: clientAvatars.ali,
         title: 'إنشاء فيديو ترويجي قصير',
         budget: 45000,
         deadline: '2024-10-20',

@@ -1,9 +1,10 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { freelancersData } from '../data/mockData';
 import type { Freelancer } from '../types';
 import Pagination from '../components/Pagination';
 import { FREELANCER_CATEGORIES, FREELANCER_SUBCATEGORIES } from '../constants';
+import Avatar from '../components/dashboard/Avatar';
+import { getAllFreelancers } from '../services/freelancerService';
 
 interface FreelancersPageProps {
     onSelectFreelancer: (id: number) => void;
@@ -15,7 +16,7 @@ const FreelancerCard: React.FC<{ freelancer: Freelancer; onSelect: (id: number) 
         className="bg-white rounded-xl overflow-hidden shadow-sm border border-transparent p-5 cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl hover:border-[var(--primary)] hover:-translate-y-2"
     >
         <div className="flex items-center mb-4">
-            <img src={freelancer.image} alt={freelancer.name} className="w-16 h-16 rounded-full ml-4" />
+            <Avatar src={freelancer.avatar} name={freelancer.name} size={64} className="ml-4" />
             <div>
                 <h3 className="font-bold text-lg text-[var(--primary-dark)]">{freelancer.name}</h3>
                 <div className="text-yellow-400 text-sm flex items-center gap-1">
@@ -30,6 +31,7 @@ const FreelancerCard: React.FC<{ freelancer: Freelancer; onSelect: (id: number) 
             {freelancer.skills.slice(0, 3).map(skill => 
                 <span key={skill} className="bg-[var(--primary-lightest)] text-[var(--primary-dark)] px-3 py-1 rounded-full text-xs font-medium">{skill}</span>
             )}
+            {freelancer.skills.length === 0 && <span className="text-gray-400 text-xs italic">لا توجد مهارات محددة بعد</span>}
         </div>
     </div>
 );
@@ -74,10 +76,16 @@ const FreelancersPage: React.FC<FreelancersPageProps> = ({ onSelectFreelancer })
     const [category, setCategory] = useState('all');
     const [subcategory, setSubcategory] = useState('all');
     const [currentPage, setCurrentPage] = useState(1);
+    const [freelancers, setFreelancers] = useState<Freelancer[]>([]);
     const itemsPerPage = 12;
 
+    useEffect(() => {
+        // جلب البيانات المدمجة (الافتراضية + المسجلين)
+        setFreelancers(getAllFreelancers());
+    }, []);
+
     const filteredFreelancers = useMemo(() => {
-        return freelancersData.filter(f =>
+        return freelancers.filter(f =>
             (searchTerm.length < 2 || 
              f.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
              f.description.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -85,7 +93,7 @@ const FreelancersPage: React.FC<FreelancersPageProps> = ({ onSelectFreelancer })
             (category === 'all' || f.category === category) &&
             (subcategory === 'all' || f.subcategory === subcategory)
         );
-    }, [searchTerm, category, subcategory]);
+    }, [searchTerm, category, subcategory, freelancers]);
 
     const paginatedFreelancers = useMemo(() => {
         const start = (currentPage - 1) * itemsPerPage;
@@ -127,7 +135,7 @@ const FreelancersPage: React.FC<FreelancersPageProps> = ({ onSelectFreelancer })
                 </div>
 
                 <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-[var(--primary-dark)]">{filteredFreelancers.length} مستقل</h2>
+                    <h2 className="text-2xl font-bold text-[var(--primary-dark)]">{filteredFreelancers.length} مستقل متاح الآن</h2>
                 </div>
 
                 {paginatedFreelancers.length > 0 ? (
@@ -138,8 +146,8 @@ const FreelancersPage: React.FC<FreelancersPageProps> = ({ onSelectFreelancer })
                     </div>
                 ) : (
                     <div className="text-center py-16 text-gray-500">
-                        <i className="fas fa-search text-5xl mb-4"></i>
-                        <h3 className="text-2xl font-bold">لا توجد نتائج</h3>
+                        <i className="fas fa-users-slash text-5xl mb-4"></i>
+                        <h3 className="text-2xl font-bold">لا يوجد مستقلون</h3>
                         <p>حاول تعديل كلمات البحث أو الفلاتر.</p>
                     </div>
                 )}

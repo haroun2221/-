@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { productsData } from '../data/mockData';
 import type { Product } from '../types';
@@ -9,13 +8,15 @@ interface ProductsPageProps {
     onSelectProduct: (id: number) => void;
 }
 
+const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400&h=300&fit=crop';
+
 const ProductCard: React.FC<{ product: Product; onSelect: (id: number) => void }> = ({ product, onSelect }) => (
     <div 
         onClick={() => onSelect(product.id)}
         className="bg-white rounded-xl overflow-hidden shadow-sm border border-transparent flex flex-col cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl hover:border-[var(--primary-dark)] hover:-translate-y-2 group"
     >
         <div className="h-48 overflow-hidden">
-            <img src={product.images[0]} alt={product.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <img src={product.images?.[0] || PLACEHOLDER_IMAGE} alt={product.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
         </div>
         <div className="p-5 flex-grow flex flex-col">
             <h3 className="font-bold text-lg h-14 text-[var(--primary-dark)]">{product.title}</h3>

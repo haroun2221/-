@@ -1,6 +1,8 @@
 
 import React from 'react';
 import FaqItem from '../components/FaqItem';
+import Avatar from '../components/dashboard/Avatar';
+import type { InitialAvatarConfig } from '../types';
 
 interface HomePageProps {
     onHireTalentClick: () => void;
@@ -22,10 +24,10 @@ const ServiceCard: React.FC<{ icon: string, title: string, description: string, 
     </div>
 );
 
-const ReviewCard: React.FC<{ name: string, role: string, avatar: string, review: string, color: 'primary' | 'secondary' }> = ({ name, role, avatar, review, color }) => (
+const ReviewCard: React.FC<{ name: string, role: string, avatarSrc: string | InitialAvatarConfig, review: string, color: 'primary' | 'secondary' }> = ({ name, role, avatarSrc, review, color }) => (
     <div className="bg-gray-50 rounded-xl p-8 transition-all duration-300 ease-in-out hover:transform hover:-translate-y-1 hover:shadow-lg">
         <div className="flex items-center mb-4">
-            <img src={avatar} alt="Testimonial" className="w-12 h-12 rounded-full ml-4" />
+            <Avatar src={avatarSrc} name={name} size={48} className="ml-4" />
             <div>
                 <h4 className="font-bold text-[var(--primary-dark)]">{name}</h4>
                 <p className="text-sm text-gray-500">{role}</p>
@@ -43,21 +45,42 @@ const ReviewCard: React.FC<{ name: string, role: string, avatar: string, review:
 
 
 const HomePage: React.FC<HomePageProps> = ({ onHireTalentClick, onStartNowClick }) => {
+    
+    const reviewAvatars: InitialAvatarConfig[] = [
+        { bgColor: '#6366f1', textColor: '#FFFFFF', borderColor: '#a5b4fc', borderSize: 2, fontSize: 'large' }, // أحمد محمد -> أ
+        { bgColor: '#ec4899', textColor: '#FFFFFF', borderColor: '#f9a8d4', borderSize: 2, fontSize: 'large' }, // فاطمة علي -> ف
+        { bgColor: '#10b981', textColor: '#FFFFFF', borderColor: '#6ee7b7', borderSize: 2, fontSize: 'large' }, // يوسف خالد -> ي
+    ];
+
     return (
         <div className="animate-[fadeIn_0.5s_ease-out]">
             {/* Hero Section */}
-            <div className="bg-gradient-to-br from-[var(--primary-dark)] to-[var(--secondary)] text-white py-24">
+            <div
+                className="text-white py-24"
+                style={{
+                    backgroundImage: "linear-gradient(to bottom right, rgba(30, 58, 138, 0.85), rgba(249, 115, 22, 0.85)), url('https://images.unsplash.com/photo-1605379399642-870262d3d051?w=1200&h=600&fit=crop&q=80')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center center',
+                    backgroundAttachment: 'fixed'
+                }}
+            >
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h1 className="text-5xl md:text-6xl font-bold mb-6">اكتشف أفضل المواهب الحرية في الجزائر</h1>
-                        <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-90">تواصل مع آلاف المستقلين المحترفين لتنفيذ مشاريعك بأعلى جودة وأفضل الأسعار</p>
-                        <div className="flex justify-center space-x-4">
-                            <button onClick={onHireTalentClick} className="btn bg-gradient-to-r from-[var(--secondary)] to-[var(--secondary-dark)] text-white px-8 py-4 rounded-full text-lg font-medium transition-transform duration-300 hover:scale-105 shadow-lg">
-                                <i className="fas fa-briefcase ml-2"></i> توظيف المواهب
-                            </button>
-                            <button className="btn border-2 border-white text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:bg-white hover:text-[var(--primary-dark)]">
-                                <i className="fas fa-user ml-2"></i> البحث عن عمل
-                            </button>
+                         <div style={{ opacity: 0, animation: 'fadeIn 1s ease-out 0.2s forwards' }}>
+                            <h1 className="text-5xl md:text-6xl font-bold mb-6">اكتشف أفضل الأعمال الحرة في الجزائر</h1>
+                        </div>
+                        <div style={{ opacity: 0, animation: 'fadeIn 1s ease-out 0.5s forwards' }}>
+                            <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-90">تواصل مع آلاف المستقلين المحترفين لتنفيذ مشاريعك بأعلى جودة وأفضل الأسعار</p>
+                        </div>
+                        <div style={{ opacity: 0, animation: 'fadeIn 1s ease-out 0.8s forwards' }}>
+                            <div className="flex justify-center space-x-4">
+                                <button onClick={onHireTalentClick} className="btn bg-gradient-to-r from-[var(--secondary)] to-[var(--secondary-dark)] text-white px-8 py-4 rounded-full text-lg font-medium transition-transform duration-300 hover:scale-105 shadow-lg">
+                                    <i className="fas fa-briefcase ml-2"></i> توظيف المواهب
+                                </button>
+                                <button onClick={onHireTalentClick} className="btn border-2 border-white text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:bg-white hover:text-[var(--primary-dark)]">
+                                    <i className="fas fa-user ml-2"></i> المستقلون
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -99,9 +122,9 @@ const HomePage: React.FC<HomePageProps> = ({ onHireTalentClick, onStartNowClick 
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="text-center mb-16"><h2 className="text-4xl font-bold mb-4 text-[var(--primary-dark)]">ماذا يقول عملاؤنا</h2><p className="text-xl text-gray-600 max-w-3xl mx-auto">تجارب حقيقية من عملاء راضين</p></div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <ReviewCard name="أحمد محمد" role="مدير شركة تقنية" avatar="https://placehold.co/60x60/2E3D80/ffffff?text=k" review="منصة ممتازة وجدت المطور المناسب لمشروعي في وقت قياسي. الجودة استثنائية والدعم متواصل." color="primary" />
-                        <ReviewCard name="فاطمة علي" role="مصممة جرافيك" avatar="https://placehold.co/60x60/F28123/ffffff?text=F" review="المنصة أعطتني فرصة للعمل مع عملاء من مختلف أنحاء الجزائر. الدفع آمن والمشاريع متنوعة." color="secondary" />
-                        <ReviewCard name="يوسف خالد" role="مسوق رقمي" avatar="https://placehold.co/60x60/2E3D80/ffffff?text=Y" review="أفضل منصة للعمل الحر في الجزائر. سهولة الاستخدام وجودة المشاريع ممتازة." color="primary" />
+                        <ReviewCard name="أحمد محمد" role="مدير شركة تقنية" avatarSrc={reviewAvatars[0]} review="منصة ممتازة وجدت المطور المناسب لمشروعي في وقت قياسي. الجودة استثنائية والدعم متواصل." color="primary" />
+                        <ReviewCard name="فاطمة علي" role="مصممة جرافيك" avatarSrc={reviewAvatars[1]} review="المنصة أعطتني فرصة للعمل مع عملاء من مختلف أنحاء الجزائر. الدفع آمن والمشاريع متنوعة." color="secondary" />
+                        <ReviewCard name="يوسف خالد" role="مسوق رقمي" avatarSrc={reviewAvatars[2]} review="أفضل منصة للعمل الحر في الجزائر. سهولة الاستخدام وجودة المشاريع ممتازة." color="primary" />
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import type { Freelancer } from '../types';
+import Avatar from '../components/dashboard/Avatar';
 
 interface CommunicationPageProps {
     freelancer: Freelancer;
@@ -67,8 +67,8 @@ const CommunicationPage: React.FC<CommunicationPageProps> = ({ freelancer, onBac
             <div className="max-w-6xl mx-auto my-8 px-4">
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col" style={{ height: '80vh', maxHeight: '800px' }}>
                     <div className="bg-gray-50 p-4 flex justify-between items-center flex-shrink-0 border-b">
-                        <div className="flex items-center">
-                            <img src={freelancer.image} alt={freelancer.name} className="w-12 h-12 rounded-full ml-4" />
+                        <div className="flex items-center gap-4">
+                            <Avatar src={freelancer.avatar} name={freelancer.name} size={48} />
                             <div>
                                 <h2 className="text-xl font-bold text-gray-800">{freelancer.name}</h2>
                                 <p className="text-sm text-green-500 flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>متصل الآن</p>

@@ -1,71 +1,117 @@
 
-import React from 'react';
-import type { Freelancer } from '../types';
+import React, { useState, useEffect } from 'react';
+import type { Freelancer, PortfolioItem } from '../types';
+import Avatar from '../components/dashboard/Avatar';
+import { getFreelancerPortfolio } from '../services/portfolioService';
 
 interface FreelancerProfilePageProps {
     freelancer: Freelancer;
+    onSelectProject: (id: string) => void;
     onStartCommunication: (id: number) => void;
 }
 
-const FreelancerProfilePage: React.FC<FreelancerProfilePageProps> = ({ freelancer, onStartCommunication }) => {
+const FreelancerProfilePage: React.FC<FreelancerProfilePageProps> = ({ freelancer, onSelectProject, onStartCommunication }) => {
+    const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
+
+    useEffect(() => {
+        const savedProjects = getFreelancerPortfolio(freelancer.id);
+        setPortfolio(savedProjects);
+    }, [freelancer.id]);
+
     return (
-        <div className="animate-[profileZoomIn_0.4s_ease-out]">
-            <div 
-                className="h-64 bg-cover bg-center"
-                style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://placehold.co/1200x400/2E3D80/A8B0D1?text=Portfolio+Banner')` }}
-            ></div>
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-                <div className="bg-white rounded-2xl shadow-xl p-8 -mt-20 relative z-10">
-                    <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-right">
-                        <img 
-                            src={freelancer.image} 
-                            alt={freelancer.name} 
-                            className="w-32 h-32 rounded-full border-4 border-white shadow-lg -mt-24 mb-4 md:mb-0 md:ml-8"
-                        />
+        <div className="animate-[profileZoomIn_0.4s_ease-out] bg-gray-50 min-h-screen pb-20">
+            {/* Header Banner */}
+            <div className="h-80 bg-cover bg-center relative" style={{ backgroundImage: `linear-gradient(rgba(30, 58, 138, 0.7), rgba(249, 115, 22, 0.4)), url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1600&h=600&fit=crop')` }}>
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent"></div>
+            </div>
+
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="bg-white rounded-[2.5rem] shadow-2xl p-10 -mt-32 relative z-10 border border-gray-100">
+                    <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-right gap-8">
+                        <div className="relative -mt-24 flex-shrink-0">
+                           <Avatar src={freelancer.avatar} name={freelancer.name} size={160} className="border-8 border-white shadow-2xl ring-1 ring-gray-100" />
+                           <div className="absolute bottom-4 right-4 w-6 h-6 bg-green-500 border-4 border-white rounded-full"></div>
+                        </div>
                         <div className="flex-grow">
-                            <h1 className="text-3xl font-bold text-[var(--primary-dark)]">{freelancer.name}</h1>
-                            <p className="text-xl text-gray-500 mt-1">{freelancer.title}</p>
-                            <div className="flex items-center justify-center md:justify-start text-yellow-400 mt-2">
-                                <span className="font-bold text-lg ml-1 text-gray-800">{freelancer.rating.toFixed(1)}</span>
-                                <i className="fas fa-star ml-2"></i>
-                                <span className="text-gray-600">({freelancer.reviews} مراجعة)</span>
+                            <h1 className="text-4xl font-black text-[var(--primary-dark)] tracking-tight">{freelancer.name}</h1>
+                            <p className="text-2xl text-gray-500 font-medium mt-1">{freelancer.title}</p>
+                            <div className="flex flex-wrap justify-center md:justify-start items-center gap-6 mt-4">
+                                <div className="flex items-center gap-2 text-yellow-500 font-black">
+                                    <i className="fas fa-star"></i>
+                                    <span className="text-gray-800 text-lg">{freelancer.rating > 0 ? freelancer.rating.toFixed(1) : 'جديد'}</span>
+                                    <span className="text-gray-400 font-normal">({freelancer.reviews} تقييم)</span>
+                                </div>
+                                <div className="text-gray-400 font-bold text-sm">
+                                    <i className="fas fa-map-marker-alt ml-1 text-[var(--primary)]"></i> الجزائر
+                                </div>
+                                <div className="bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-sm font-black uppercase tracking-wider">
+                                    {freelancer.category}
+                                </div>
                             </div>
                         </div>
-                        <div className="mt-6 md:mt-0">
-                            <button 
-                                onClick={() => onStartCommunication(freelancer.id)}
-                                className="btn bg-gradient-to-r from-[var(--secondary)] to-[var(--secondary-dark)] text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg transition-transform duration-300 hover:scale-105"
-                            >
+                        <div className="flex flex-col gap-3 min-w-[200px]">
+                            <button onClick={() => onStartCommunication(freelancer.id)} className="btn bg-gradient-to-r from-[var(--secondary)] to-[var(--secondary-dark)] text-white px-8 py-4 rounded-2xl text-lg font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all">
                                 <i className="fas fa-paper-plane ml-2"></i> تواصل معي
                             </button>
                         </div>
                     </div>
-                    <div className="border-t my-8"></div>
-                    <div>
-                        <h3 className="text-2xl font-bold mb-4 text-[var(--primary-dark)]">نبذة عني</h3>
-                        <p className="text-gray-600 leading-relaxed">{freelancer.bio}</p>
-                    </div>
-                    <div className="border-t my-8"></div>
-                    <div>
-                        <h3 className="text-2xl font-bold mb-4 text-[var(--primary-dark)]">المهارات</h3>
-                        <div className="flex flex-wrap gap-3">
-                            {freelancer.skills.map(skill => (
-                                <span key={skill} className="bg-[var(--primary-lightest)] text-[var(--primary-dark)] font-medium px-4 py-2 rounded-full text-md cursor-pointer transition-all duration-200 hover:bg-[var(--primary-dark)] hover:text-white hover:scale-105">{skill}</span>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="border-t my-8"></div>
-                    <div>
-                        <h3 className="text-2xl font-bold mb-6 text-[var(--primary-dark)]">أعمالي ومشاريعي</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {freelancer.projects.map(p => (
-                                <div key={p.title} className="rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 group">
-                                    <img src={p.img} alt={p.title} className="w-full h-48 object-cover" />
-                                    <div className="p-4 bg-white">
-                                        <h4 className="font-bold text-lg text-gray-800 group-hover:text-[var(--primary-dark)] transition-colors">{p.title}</h4>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-16">
+                        <div className="lg:col-span-2 space-y-12">
+                             <div>
+                                <h3 className="text-2xl font-black mb-6 text-gray-800 flex items-center gap-3">
+                                    <span className="w-1.5 h-8 bg-[var(--primary)] rounded-full"></span>
+                                    نبذة عني
+                                </h3>
+                                <p className="text-gray-600 leading-relaxed text-lg whitespace-pre-line">
+                                    {freelancer.bio || 'هذا المستقل لم يقم بإضافة نبذة شخصية مفصلة بعد، ولكن أعماله تتحدث عن احترافيته.'}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 className="text-2xl font-black mb-8 text-gray-800 flex items-center gap-3">
+                                    <span className="w-1.5 h-8 bg-[var(--primary)] rounded-full"></span>
+                                    معرض الأعمال ({portfolio.length})
+                                </h3>
+                                {portfolio.length > 0 ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                                        {portfolio.map(p => (
+                                            <div 
+                                                key={p.id} 
+                                                onClick={() => onSelectProject(p.id)}
+                                                className="rounded-3xl overflow-hidden shadow-sm transition-all cursor-pointer hover:shadow-2xl hover:-translate-y-2 group bg-white border border-gray-100"
+                                            >
+                                                <div className="relative overflow-hidden aspect-[4/3]">
+                                                    <img src={p.image} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                        <span className="bg-white text-[var(--primary-dark)] px-6 py-2.5 rounded-2xl font-black shadow-xl">عرض تفاصيل المشروع</span>
+                                                    </div>
+                                                </div>
+                                                <div className="p-6">
+                                                    <h4 className="font-black text-xl text-gray-800 group-hover:text-[var(--primary)] transition-colors">{p.title}</h4>
+                                                    <p className="text-sm font-bold text-gray-400 mt-1 uppercase">{p.category}</p>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
+                                ) : (
+                                    <div className="text-center py-20 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200">
+                                        <i className="fas fa-briefcase text-5xl text-gray-300 mb-4"></i>
+                                        <p className="text-xl text-gray-400 font-bold tracking-tight">لا توجد أعمال منشورة حالياً في المعرض.</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="space-y-8">
+                            <div className="bg-gray-50 p-8 rounded-[2rem] border border-gray-100">
+                                <h3 className="text-xl font-black mb-6 text-gray-800">المهارات والخبرات</h3>
+                                <div className="flex flex-wrap gap-2.5">
+                                    {freelancer.skills.length > 0 ? freelancer.skills.map(skill => (
+                                        <span key={skill} className="bg-white text-[var(--primary-dark)] font-black px-4 py-2 rounded-2xl text-sm shadow-sm border border-gray-100 transition-all hover:bg-[var(--primary)] hover:text-white">{skill}</span>
+                                    )) : <span className="text-gray-400 italic">لا توجد مهارات محددة.</span>}
                                 </div>
-                            ))}
+                            </div>
                         </div>
                     </div>
                 </div>

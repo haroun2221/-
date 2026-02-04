@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { User } from '../../services/authService';
 import type { FreelancerProfileData } from '../../types';
@@ -17,7 +16,7 @@ const DashboardProfileSidebar: React.FC<DashboardProfileSidebarProps> = ({ user,
         <div className="space-y-8">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                  <div className="flex justify-center mb-4">
-                    <Avatar config={profile.avatar} size={96} />
+                    <Avatar src={profile.avatar} name={profile.name} size={96} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800">{profile.name}</h3>
                 <p className="text-gray-500">مستقل</p>

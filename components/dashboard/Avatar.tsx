@@ -1,36 +1,53 @@
 import React from 'react';
-import type { AvatarConfig } from '../../types';
-import { avatarPresets } from '../../data/dashboardProfileMockData';
+import type { InitialAvatarConfig } from '../../types';
 
 interface AvatarProps {
-    config: AvatarConfig;
+    src: string | InitialAvatarConfig;
+    name: string;
     size: number;
     className?: string;
 }
 
-const Avatar: React.FC<AvatarProps> = ({ config, size, className }) => {
-    const selectedPreset = avatarPresets.find(p => p.id === config.presetId);
-    const borderSize = Math.max(2, Math.round(size / 20));
+const Avatar: React.FC<AvatarProps> = ({ src, name, size, className }) => {
+    // Case 1: src is a string (URL) - for clients or other images
+    if (typeof src === 'string') {
+        return (
+            <img
+                src={src}
+                alt={name}
+                className={`rounded-full object-cover bg-gray-200 ${className || ''}`}
+                style={{
+                    width: size,
+                    height: size,
+                }}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null; 
+                  target.src = 'https://i.ibb.co/68q2v7B/p-man-1.jpg'; // A default placeholder
+                }}
+            />
+        );
+    }
+
+    // Case 2: src is an InitialAvatarConfig object - for freelancers
+    const config = src;
+    const initial = name?.charAt(0).toUpperCase() || '?';
+    const fontSizeValue = size * (config.fontSize === 'large' ? 0.5 : 0.4);
 
     return (
         <div
-            className={`relative rounded-full flex items-center justify-center shadow-md ${className || ''}`}
+            className={`rounded-full flex items-center justify-center font-bold object-cover ${className || ''}`}
             style={{
                 width: size,
                 height: size,
                 backgroundColor: config.bgColor,
-                border: `${borderSize}px solid ${config.borderColor}`,
+                border: `${config.borderSize || 0}px solid ${config.borderColor || 'transparent'}`,
+                boxSizing: 'border-box',
             }}
         >
-            <div
-                style={{
-                    width: size * 0.65,
-                    height: size * 0.65,
-                    color: config.avatarColor,
-                }}
-            >
-                {selectedPreset?.path}
-            </div>
+            <span style={{ color: config.textColor, fontSize: `${fontSizeValue}px`, lineHeight: `${fontSizeValue}px` }}>
+                {initial}
+            </span>
         </div>
     );
 };

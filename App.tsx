@@ -7,17 +7,19 @@ import FreelancersPage from './pages/FreelancersPage';
 import ProductsPage from './pages/ProductsPage';
 import HowItWorksPage from './pages/HowItWorksPage';
 import FreelancerProfilePage from './pages/FreelancerProfilePage';
+import ProjectDetailsPage from './pages/ProjectDetailsPage';
 import CommunicationPage from './pages/CommunicationPage';
 import FreelancerDashboardPage from './pages/FreelancerDashboardPage';
 import AuthModal from './components/auth/AuthModal';
 import ProductDetailModal from './components/ProductDetailModal';
 import AIChatPopup from './components/AIChatPopup';
 import { getCurrentUser, logoutUser, User } from './services/authService';
-import { freelancersData } from './data/mockData';
 import { productsData } from './data/mockData';
-import type { Freelancer, Product } from './types';
+import { getFreelancerById } from './services/freelancerService';
+import { getFreelancerPortfolio } from './services/portfolioService';
+import type { Freelancer, Product, PortfolioItem } from './types';
 
-export type Page = 'home' | 'freelancers' | 'products' | 'how-it-works' | 'freelancer-profile' | 'communication' | 'dashboard';
+export type Page = 'home' | 'freelancers' | 'products' | 'how-it-works' | 'freelancer-profile' | 'project-details' | 'communication' | 'dashboard';
 
 const App: React.FC = () => {
     // State management
@@ -25,6 +27,7 @@ const App: React.FC = () => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [authModalView, setAuthModalView] = useState<string | null>(null);
     const [selectedFreelancerId, setSelectedFreelancerId] = useState<number | null>(null);
+    const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
     const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
     const [isAiChatOpen, setIsAiChatOpen] = useState(false);
 
@@ -34,8 +37,8 @@ const App: React.FC = () => {
     }, []);
 
     // Navigation handler
-    const handleNavigate = (newPage: Page) => {
-        setPage(newPage);
+    const handleNavigate = (page: Page) => {
+        setPage(page);
         window.scrollTo(0, 0);
     };
 
@@ -60,13 +63,33 @@ const App: React.FC = () => {
         setSelectedFreelancerId(id);
         handleNavigate('freelancer-profile');
     };
+
+    const handleSelectProject = (projectId: string) => {
+        setSelectedProjectId(projectId);
+        handleNavigate('project-details');
+    };
+
     const handleStartCommunication = (id: number) => {
-        setSelectedFreelancerId(id);
-        handleNavigate('communication');
+        if (currentUser) {
+            setSelectedFreelancerId(id);
+            handleNavigate('communication');
+        } else {
+            handleAuthClick('auth-choice-view');
+        }
     };
     const handleSelectProduct = (id: number) => {
         setSelectedProductId(id);
     };
+    
+    const handlePurchaseAttempt = () => {
+        if (!currentUser) {
+            setSelectedProductId(null); // Close product modal before showing auth
+            handleAuthClick('auth-choice-view');
+        } else {
+            alert('تمت الإضافة إلى السلة بنجاح! (وظيفة تجريبية)');
+        }
+    };
+
 
     // Render logic
     const renderPage = () => {
@@ -80,10 +103,16 @@ const App: React.FC = () => {
             case 'how-it-works':
                 return <HowItWorksPage />;
             case 'freelancer-profile':
-                const freelancer = freelancersData.find(f => f.id === selectedFreelancerId);
-                return freelancer ? <FreelancerProfilePage freelancer={freelancer} onStartCommunication={handleStartCommunication} /> : <p>Freelancer not found.</p>;
+                const freelancer = selectedFreelancerId ? getFreelancerById(selectedFreelancerId) : null;
+                return freelancer ? <FreelancerProfilePage freelancer={freelancer} onSelectProject={handleSelectProject} onStartCommunication={handleStartCommunication} /> : <div className="p-20 text-center"><p>عذراً، المستقل غير موجود.</p><button onClick={() => handleNavigate('freelancers')} className="text-blue-500 underline mt-4">العودة لقائمة المستقلين</button></div>;
+            case 'project-details':
+                if (!selectedFreelancerId || !selectedProjectId) return <p>Project not found.</p>;
+                const pFreelancer = getFreelancerById(selectedFreelancerId);
+                const portfolio = getFreelancerPortfolio(selectedFreelancerId);
+                const project = portfolio.find(p => p.id === selectedProjectId);
+                return (pFreelancer && project) ? <ProjectDetailsPage project={project} freelancer={pFreelancer} onBack={() => handleNavigate('freelancer-profile')} /> : <p>Project not found.</p>;
             case 'communication':
-                 const commsFreelancer = freelancersData.find(f => f.id === selectedFreelancerId);
+                 const commsFreelancer = selectedFreelancerId ? getFreelancerById(selectedFreelancerId) : null;
                 return commsFreelancer ? <CommunicationPage freelancer={commsFreelancer} onBackToProfile={() => handleNavigate('freelancer-profile')} /> : <p>Freelancer not found.</p>;
             case 'dashboard':
                  return currentUser && currentUser.type === 'freelancer' ? <FreelancerDashboardPage user={currentUser} onNavigate={handleNavigate} /> : <p>Access Denied</p>;
@@ -133,6 +162,7 @@ const App: React.FC = () => {
                 <ProductDetailModal
                     product={selectedProduct}
                     onClose={() => setSelectedProductId(null)}
+                    onPurchaseAttempt={handlePurchaseAttempt}
                 />
             )}
         </div>

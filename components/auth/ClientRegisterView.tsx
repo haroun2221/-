@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { addUser, setCurrentUser } from '../../services/authService';
 import PasswordInput from './PasswordInput';
@@ -12,6 +11,7 @@ interface ClientRegisterViewProps {
 }
 
 const ClientRegisterView: React.FC<ClientRegisterViewProps> = ({ onRegisterSuccess, onBack }) => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
@@ -32,12 +32,12 @@ const ClientRegisterView: React.FC<ClientRegisterViewProps> = ({ onRegisterSucce
             return;
         }
 
-        const newUser: User = { email, phone, password, type: 'client' };
+        const newUser: Omit<User, 'avatar'> = { name, email, phone, password, type: 'client' };
         const result = addUser(newUser);
 
-        if (result.success) {
-            setCurrentUser(newUser.email);
-            onRegisterSuccess(newUser);
+        if (result.success && result.user) {
+            setCurrentUser(result.user.email);
+            onRegisterSuccess(result.user);
         } else {
             setError(result.message || 'حدث خطأ غير متوقع.');
         }
@@ -47,6 +47,10 @@ const ClientRegisterView: React.FC<ClientRegisterViewProps> = ({ onRegisterSucce
         <div className="animate-[fadeIn_0.6s_ease-out]">
             <h1 className="text-3xl font-bold mb-4 text-[var(--primary-dark)]">إنشاء حساب زبون</h1>
             <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                    <label className="font-semibold block mb-2">الاسم الكامل</label>
+                    <input type="text" value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-3 border border-slate-300 rounded-lg transition-all duration-200 ease-in-out bg-slate-50 focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-lightest)] focus:bg-white" required />
+                </div>
                 <div className="mb-4">
                     <label className="font-semibold block mb-2">البريد الإلكتروني</label>
                     <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full px-4 py-3 border border-slate-300 rounded-lg transition-all duration-200 ease-in-out bg-slate-50 focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-lightest)] focus:bg-white" required />

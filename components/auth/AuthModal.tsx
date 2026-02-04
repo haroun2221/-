@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import LoginView from './LoginView';
 import RegisterChoiceView from './RegisterChoiceView';
@@ -60,7 +59,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ initialView, onClose, onLoginSucc
 
                 </div>
                 <div className="flex-1 bg-gradient-to-br from-[var(--primary-dark)] to-[var(--secondary)] text-white hidden md:flex flex-col justify-center items-center text-center p-12">
-                    <img src="https://i.ibb.co/9gq85f4/photo-2025-09-17-12-03-57.jpg" alt="SaaHla Logo" className="h-20 w-auto mb-6" />
+                    <img src="https://i.ibb.co/FqCkWMNC/photo-2025-09-17-12-03-57.jpg" alt="SaaHla Logo" className="h-16 w-auto mb-6 rounded-lg" />
                     <h2 className="text-3xl font-bold mb-4">انضم إلى مجتمعنا</h2>
                     <p className="text-lg opacity-80">أكبر منصة للعمل الحر في الجزائر تجمع بين أفضل المستقلين وأصحاب المشاريع.</p>
                 </div>

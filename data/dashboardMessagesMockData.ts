@@ -1,10 +1,17 @@
-import type { Conversation } from '../types';
+import type { Conversation, InitialAvatarConfig } from '../types';
+
+const clientAvatars: { [key: string]: InitialAvatarConfig } = {
+    ahmed: { bgColor: '#3B82F6', textColor: '#FFFFFF', borderColor: '#93c5fd', borderSize: 2, fontSize: 'large' },
+    company: { bgColor: '#10b981', textColor: '#FFFFFF', borderColor: '#6ee7b7', borderSize: 2, fontSize: 'large' },
+    fatima: { bgColor: '#F97316', textColor: '#FFFFFF', borderColor: '#fdba74', borderSize: 2, fontSize: 'large' },
+    youssef: { bgColor: '#6366f1', textColor: '#FFFFFF', borderColor: '#a5b4fc', borderSize: 2, fontSize: 'large' },
+};
 
 export const conversationsData: Conversation[] = [
     {
         id: 1,
         clientName: 'أحمد صالح',
-        clientAvatar: 'https://placehold.co/40x40/F28123/ffffff?text=A',
+        clientAvatar: clientAvatars.ahmed,
         isOnline: true,
         projectTitle: 'كتابة 5 مقالات تسويقية',
         projectStatus: 'active',
@@ -21,7 +28,7 @@ export const conversationsData: Conversation[] = [
     {
         id: 2,
         clientName: 'شركة تقنية ناشئة',
-        clientAvatar: 'https://placehold.co/40x40/2E3D80/ffffff?text=T',
+        clientAvatar: clientAvatars.company,
         isOnline: false,
         projectTitle: 'تصميم واجهة مستخدم لتطبيق',
         projectStatus: 'active',
@@ -37,7 +44,7 @@ export const conversationsData: Conversation[] = [
     {
         id: 3,
         clientName: 'فاطمة الزهراء',
-        clientAvatar: 'https://placehold.co/40x40/F28123/ffffff?text=F',
+        clientAvatar: clientAvatars.fatima,
         isOnline: false,
         projectTitle: 'تصميم شعار وهوية بصرية',
         projectStatus: 'completed',
@@ -52,7 +59,7 @@ export const conversationsData: Conversation[] = [
     {
         id: 4,
         clientName: 'يوسف إبراهيم',
-        clientAvatar: 'https://placehold.co/40x40/2E3D80/ffffff?text=Y',
+        clientAvatar: clientAvatars.youssef,
         isOnline: true,
         projectTitle: 'تطوير صفحة هبوط',
         projectStatus: 'active',

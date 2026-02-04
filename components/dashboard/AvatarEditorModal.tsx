@@ -1,15 +1,64 @@
 import React, { useState } from 'react';
-import type { AvatarConfig } from '../../types';
-import { avatarPresets } from '../../data/dashboardProfileMockData';
+import type { InitialAvatarConfig } from '../../types';
+import Avatar from './Avatar';
 
 interface AvatarEditorModalProps {
-    currentConfig: AvatarConfig;
+    currentConfig: InitialAvatarConfig;
+    name: string;
     onClose: () => void;
-    onSave: (newConfig: AvatarConfig) => void;
+    onSave: (newConfig: InitialAvatarConfig) => void;
 }
 
-const AvatarEditorModal: React.FC<AvatarEditorModalProps> = ({ currentConfig, onClose, onSave }) => {
-    const [config, setConfig] = useState<AvatarConfig>(currentConfig);
+const ColorInput: React.FC<{ label: string; value: string; onChange: (color: string) => void }> = ({ label, value, onChange }) => (
+    <div className="flex justify-between items-center bg-gray-100 p-2 rounded-lg">
+        <label className="font-semibold text-sm text-gray-700">{label}:</label>
+        <input 
+            type="color" 
+            value={value} 
+            onChange={(e) => onChange(e.target.value)} 
+            className="w-10 h-10 border-none rounded-md bg-transparent cursor-pointer" 
+        />
+    </div>
+);
+
+const SizeSelector: React.FC<{ label: string; value: 'small' | 'large'; onChange: (value: 'small' | 'large') => void }> = ({ label, value, onChange }) => (
+    <div className="bg-gray-100 p-2 rounded-lg">
+        <label className="font-semibold text-sm text-gray-700 mb-2 block">{label}</label>
+        <div className="flex gap-2">
+            <button 
+                onClick={() => onChange('small')} 
+                className={`flex-1 py-2 rounded-lg font-semibold text-sm ${value === 'small' ? 'bg-[var(--primary)] text-white' : 'bg-gray-200'}`}
+            >
+                صغير
+            </button>
+            <button 
+                onClick={() => onChange('large')} 
+                className={`flex-1 py-2 rounded-lg font-semibold text-sm ${value === 'large' ? 'bg-[var(--primary)] text-white' : 'bg-gray-200'}`}
+            >
+                كبير
+            </button>
+        </div>
+    </div>
+);
+
+const RangeSlider: React.FC<{ label: string; value: number; min?: number; max?: number; step?: number; onChange: (value: number) => void }> = ({ label, value, min = 0, max = 10, step = 1, onChange }) => (
+     <div className="bg-gray-100 p-3 rounded-lg">
+        <label className="font-semibold text-sm text-gray-700 mb-1 block">{label}: {value}px</label>
+        <input
+            type="range"
+            min={min}
+            max={max}
+            step={step}
+            value={value}
+            onChange={(e) => onChange(parseInt(e.target.value, 10))}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+    </div>
+);
+
+
+const AvatarEditorModal: React.FC<AvatarEditorModalProps> = ({ currentConfig, name, onClose, onSave }) => {
+    const [config, setConfig] = useState<InitialAvatarConfig>(currentConfig);
     const [isClosing, setIsClosing] = useState(false);
 
     const handleClose = () => {
@@ -19,9 +68,12 @@ const AvatarEditorModal: React.FC<AvatarEditorModalProps> = ({ currentConfig, on
 
     const handleSave = () => {
         onSave(config);
+        handleClose();
     };
-
-    const selectedAvatarPreset = avatarPresets.find(p => p.id === config.presetId);
+    
+    const setConfigField = <K extends keyof InitialAvatarConfig>(field: K, value: InitialAvatarConfig[K]) => {
+        setConfig(c => ({...c, [field]: value}));
+    };
 
     return (
         <div 
@@ -30,8 +82,8 @@ const AvatarEditorModal: React.FC<AvatarEditorModalProps> = ({ currentConfig, on
         >
             <div 
                 onClick={(e) => e.stopPropagation()}
-                className={`bg-white rounded-2xl w-full max-w-3xl flex flex-col overflow-hidden shadow-2xl transition-all duration-300 ${isClosing ? 'scale-95 opacity-0' : 'scale-100 opacity-100'}`}
-                style={{ height: '90vh', maxHeight: '700px' }}
+                className={`bg-white rounded-2xl w-full max-w-2xl flex flex-col overflow-hidden shadow-2xl transition-all duration-300 ${isClosing ? 'scale-95 opacity-0' : 'scale-100 opacity-100'}`}
+                style={{ height: '90vh', maxHeight: '600px' }}
             >
                 <div className="p-4 border-b flex justify-between items-center">
                     <h2 className="text-xl font-bold text-gray-800">تخصيص الصورة الرمزية</h2>
@@ -41,53 +93,20 @@ const AvatarEditorModal: React.FC<AvatarEditorModalProps> = ({ currentConfig, on
                 </div>
 
                 <div className="flex-grow flex flex-col md:flex-row p-6 gap-6 overflow-hidden">
-                    {/* Preview & Controls */}
-                    <div className="w-full md:w-1/3 flex flex-col items-center gap-6 p-4 bg-gray-50 rounded-lg border">
+                    {/* Preview Area */}
+                    <div className="w-full md:w-1/2 flex flex-col items-center justify-center gap-6 p-4 bg-gray-50 rounded-lg border">
                         <h3 className="font-bold text-lg">معاينة</h3>
-                        <div 
-                          className="w-40 h-40 rounded-full flex items-center justify-center shadow-lg transition-all"
-                          style={{ 
-                            backgroundColor: config.bgColor,
-                            border: `6px solid ${config.borderColor}`
-                          }}
-                        >
-                            <div style={{color: config.avatarColor}} className="w-24 h-24">
-                                {selectedAvatarPreset?.path}
-                            </div>
-                        </div>
-
-                        <div className="w-full space-y-4">
-                            <div className="flex justify-between items-center">
-                                <label htmlFor="avatarColor" className="font-semibold text-sm">لون الشكل:</label>
-                                <input id="avatarColor" type="color" value={config.avatarColor} onChange={(e) => setConfig(c => ({...c, avatarColor: e.target.value}))} className="w-10 h-10 border-none bg-transparent" />
-                            </div>
-                             <div className="flex justify-between items-center">
-                                <label htmlFor="bgColor" className="font-semibold text-sm">لون الخلفية:</label>
-                                <input id="bgColor" type="color" value={config.bgColor} onChange={(e) => setConfig(c => ({...c, bgColor: e.target.value}))} className="w-10 h-10 border-none bg-transparent" />
-                            </div>
-                             <div className="flex justify-between items-center">
-                                <label htmlFor="borderColor" className="font-semibold text-sm">لون الإطار:</label>
-                                <input id="borderColor" type="color" value={config.borderColor} onChange={(e) => setConfig(c => ({...c, borderColor: e.target.value}))} className="w-10 h-10 border-none bg-transparent" />
-                            </div>
-                        </div>
+                        <Avatar src={config} name={name} size={160} />
+                        <p className="text-sm text-gray-500 text-center">قم بتغيير الإعدادات على اليسار لرؤية التغييرات هنا.</p>
                     </div>
 
-                    {/* Preset Selection */}
-                    <div className="flex-grow flex flex-col">
-                        <h3 className="font-bold text-lg mb-4">اختر شكلاً</h3>
-                        <div className="flex-grow grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 gap-3 overflow-y-auto pr-2">
-                           {avatarPresets.map(preset => (
-                                <div
-                                    key={preset.id}
-                                    onClick={() => setConfig(c => ({...c, presetId: preset.id}))}
-                                    className={`aspect-square rounded-lg flex items-center justify-center cursor-pointer border-2 transition-all ${config.presetId === preset.id ? 'border-[var(--primary)] bg-blue-50' : 'border-gray-200 bg-gray-100 hover:border-gray-400'}`}
-                                >
-                                    <div className="w-8 h-8 text-gray-700">
-                                        {preset.path}
-                                    </div>
-                                </div>
-                           ))}
-                        </div>
+                    {/* Options Selection */}
+                    <div className="flex-grow flex flex-col gap-4 overflow-y-auto pr-2">
+                        <ColorInput label="لون الخلفية" value={config.bgColor} onChange={(val) => setConfigField('bgColor', val)} />
+                        <ColorInput label="لون الحرف" value={config.textColor} onChange={(val) => setConfigField('textColor', val)} />
+                        <ColorInput label="لون الإطار" value={config.borderColor} onChange={(val) => setConfigField('borderColor', val)} />
+                        <SizeSelector label="حجم الحرف" value={config.fontSize} onChange={(val) => setConfigField('fontSize', val)} />
+                        <RangeSlider label="حجم الإطار" value={config.borderSize} onChange={(val) => setConfigField('borderSize', val)} />
                     </div>
                 </div>
 

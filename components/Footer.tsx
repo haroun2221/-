@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Page } from '../App';
 
@@ -12,7 +11,7 @@ const ProfessionalFooter: React.FC<{ onNavigate: (page: Page) => void }> = ({ on
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="mb-8 md:mb-0">
-                    <img src="https://i.ibb.co/9gq85f4/photo-2025-09-17-12-03-57.jpg" alt="SaaHla Logo" className="h-12 w-auto mb-4" />
+                    <img src="https://i.ibb.co/FqCkWMNC/photo-2025-09-17-12-03-57.jpg" alt="SaaHla Logo" className="h-12 w-auto mb-4 rounded-lg" />
                     <p className="text-gray-400">منصة SaaHla هي وجهتك الأولى للعثور على أفضل المستقلين في الجزائر لتنفيذ مشاريعك بكل احترافية وجودة.</p>
                     <div className="flex space-x-4 mt-6">
                         <a href="#" className="text-gray-400 hover:text-white text-2xl transition-transform duration-300 hover:scale-110"><i className="fab fa-facebook-f"></i></a>

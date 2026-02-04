@@ -1,4 +1,3 @@
-
 import type { Transaction, EarningsSource, Notification } from '../types';
 
 export const dashboardData = {
@@ -45,9 +44,15 @@ export const earningsPageData = {
     ] as Transaction[],
 };
 
+const notificationAvatars: { [key: string]: string } = {
+    ahmed: 'https://i.ibb.co/68q2v7B/p-man-1.jpg',
+    youssef: 'https://i.ibb.co/3kM2C2f/p-man-2.jpg',
+    company: 'https://i.ibb.co/vLYD2kC/p-woman-2.jpg',
+};
+
 export const dashboardNotificationsData: Notification[] = [
-    { id: 1, from: 'أحمد صالح', message: 'مرحباً، هل هناك أي تحديث بخصوص المقالات؟', time: 'منذ دقيقتين', read: false, image: 'https://placehold.co/40x40/F28123/ffffff?text=A', conversationId: 1 },
-    { id: 2, from: 'إدارة الموقع', message: 'عرض جديد لمشروع "تطوير صفحة هبوط".', time: 'منذ ساعة', read: false, image: 'https://i.ibb.co/9gq85f4/photo-2025-09-17-12-03-57.jpg' },
-    { id: 3, from: 'يوسف إبراهيم', message: 'أود الاستفسار عن عرضك.', time: 'منذ 5 ساعات', read: true, image: 'https://placehold.co/40x40/2E3D80/ffffff?text=Y', conversationId: 4 },
-    { id: 4, from: 'شركة تقنية ناشئة', message: 'شكراً، التصميم يبدو رائعاً!', time: 'أمس', read: true, image: 'https://placehold.co/40x40/2E3D80/ffffff?text=T', conversationId: 2 },
+    { id: 1, from: 'أحمد صالح', message: 'مرحباً، هل هناك أي تحديث بخصوص المقالات؟', time: 'منذ دقيقتين', read: false, avatar: notificationAvatars.ahmed, conversationId: 1 },
+    { id: 2, from: 'إدارة الموقع', message: 'عرض جديد لمشروع "تطوير صفحة هبوط".', time: 'منذ ساعة', read: false, image: 'https://i.ibb.co/FqCkWMNC/photo-2025-09-17-12-03-57.jpg' },
+    { id: 3, from: 'يوسف إبراهيم', message: 'أود الاستفسار عن عرضك.', time: 'منذ 5 ساعات', read: true, avatar: notificationAvatars.youssef, conversationId: 4 },
+    { id: 4, from: 'شركة تقنية ناشئة', message: 'شكراً، التصميم يبدو رائعاً!', time: 'أمس', read: true, avatar: notificationAvatars.company, conversationId: 2 },
 ];

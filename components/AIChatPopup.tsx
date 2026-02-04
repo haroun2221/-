@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+// Fix: Standardized initialization with direct reference to process.env.API_KEY
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 interface AIChatPopupProps {
     onClose: () => void;
@@ -55,8 +55,9 @@ const AIChatPopup: React.FC<AIChatPopupProps> = ({ onClose }) => {
 
     const getBotResponse = async (question: string): Promise<string> => {
         try {
+            // Fix: Updated to recommended 'gemini-3-flash-preview' model for Q&A tasks
             const response = await ai.models.generateContent({
-                model: "gemini-2.5-flash",
+                model: 'gemini-3-flash-preview',
                 contents: question,
                 config: {
                     systemInstruction: `أنت "SaaHla AI"، مساعد ذكي وخبير في منصة العمل الحر الجزائرية "SaaHla". 

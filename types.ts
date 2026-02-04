@@ -1,17 +1,31 @@
 
 import React from 'react';
 
+export interface InitialAvatarConfig {
+  bgColor: string;
+  textColor: string;
+  borderColor: string;
+  fontSize: 'small' | 'large';
+  borderSize: number;
+}
+
 export interface User {
+  name: string;
   email: string;
   phone?: string;
   password?: string;
   type: 'client' | 'freelancer';
   wilaya?: string;
+  avatar: string | InitialAvatarConfig;
 }
 
 export interface Project {
+  id: string;
   title: string;
   img: string;
+  description?: string;
+  projectLink?: string;
+  toolsUsed?: string[];
 }
 
 export interface Freelancer {
@@ -20,7 +34,7 @@ export interface Freelancer {
   title: string;
   rating: number;
   reviews: number;
-  image: string;
+  avatar: InitialAvatarConfig; 
   description: string;
   skills: string[];
   category: string;
@@ -54,7 +68,8 @@ export interface Notification {
     message: string;
     time: string;
     read: boolean;
-    image: string;
+    image?: string; 
+    avatar?: string | InitialAvatarConfig; 
     freelancerId?: number;
     conversationId?: number;
 }
@@ -62,7 +77,7 @@ export interface Notification {
 export interface DashboardProject {
   id: number;
   clientName: string;
-  clientAvatar: string;
+  clientAvatar: string; 
   title: string;
   budget: number;
   deadline: string;
@@ -100,7 +115,7 @@ export interface Message {
 export interface Conversation {
   id: number;
   clientName: string;
-  clientAvatar: string;
+  clientAvatar: string | InitialAvatarConfig; 
   isOnline: boolean;
   projectTitle: string;
   projectStatus: 'active' | 'completed';
@@ -110,46 +125,45 @@ export interface Conversation {
   messages: Message[];
 }
 
-// Types for Freelancer Profile Edit Page
 export interface Skill {
   name: string;
   level: 'مبتدئ' | 'متوسط' | 'خبير';
 }
 
 export interface Service {
-  id: number;
+  id: string;
   icon: string;
   title: string;
   price: number;
+  description?: string;
 }
 
 export interface PortfolioItem {
-  id: number;
+  id: string;
   image: string;
+  moreImages?: string[]; // صور إضافية
   title: string;
   category: string;
   date: string;
+  description?: string;
+  projectLink?: string;
+  toolsUsed?: string[];
+  features?: string[]; // مميزات المشروع
 }
 
 export interface ProfileReview {
   id: number;
   clientName: string;
-  clientAvatar: string;
+  clientAvatar: string; 
   service: string;
   rating: number;
   comment: string;
   reply?: string;
 }
 
-export interface AvatarConfig {
-    presetId: string;
-    bgColor: string;
-    avatarColor: string;
-    borderColor: string;
-}
-
 export interface FreelancerProfileData {
-  avatar: AvatarConfig;
+  id: number;
+  avatar: InitialAvatarConfig; 
   name: string;
   tagline: string;
   location: string;
@@ -165,9 +179,4 @@ export interface FreelancerProfileData {
     completedProjects: number;
     satisfactionRate: number;
   };
-}
-
-export interface AvatarPreset {
-    id: string;
-    path: React.ReactNode;
 }

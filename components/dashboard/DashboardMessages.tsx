@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { conversationsData } from '../../data/dashboardMessagesMockData';
 import type { Conversation, Message } from '../../types';
+import Avatar from './Avatar';
 
 // ChatList component on the right
 const ChatList: React.FC<{
@@ -21,7 +21,7 @@ const ChatList: React.FC<{
                     className={`flex items-start gap-4 p-4 cursor-pointer border-r-4 transition-all duration-200 ${selectedConversationId === convo.id ? 'bg-blue-50 border-[var(--primary)]' : 'border-transparent hover:bg-gray-50'}`}
                 >
                     <div className="relative flex-shrink-0">
-                        <img src={convo.clientAvatar} alt={convo.clientName} className="w-12 h-12 rounded-full" />
+                        <Avatar src={convo.clientAvatar} name={convo.clientName} size={48} />
                         <span className={`absolute bottom-0 right-0 block h-3 w-3 rounded-full border-2 border-white ${convo.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
                     </div>
                     <div className="flex-grow overflow-hidden">
@@ -109,7 +109,7 @@ const ChatWindow: React.FC<{ conversation: Conversation | null }> = ({ conversat
             {/* Header */}
             <div className="p-4 border-b bg-white flex justify-between items-center">
                 <div className="flex items-center gap-4">
-                    <img src={conversation.clientAvatar} alt={conversation.clientName} className="w-12 h-12 rounded-full" />
+                    <Avatar src={conversation.clientAvatar} name={conversation.clientName} size={48} />
                     <div>
                          <h3 className="text-lg font-bold text-gray-800">{conversation.clientName}</h3>
                          <div className="text-xs text-gray-500">{conversation.isOnline ? 'متصل الآن' : 'غير متصل'}</div>
